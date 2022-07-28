@@ -110,7 +110,7 @@
     document
       .getElementById("safePrompt-btn")
       .addEventListener("click", (event) => {
-        res = DomPurify.sanitize(
+        res = DOMPurify.sanitize(
           prompt("Please put something in the prompt...")
         );
         document.getElementById("messageOutput").innerHTML = res
