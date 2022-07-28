@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--Placeholder for now-->
+    <link rel="stylesheet" href="/index.css" />
+
+    <style>
+      tr:nth-child(even){
+        background-color: rgb(244, 244, 244)
+      }
+
+      button.deleteBtn {
+        background-color: var(--cancel-color);
+        filter: drop-shadow(0px 4px 16px var(--cancel-shadow));
+        color: var(--bg-color);
+        padding: 5px 15px;
+        margin: 5px;
+        font-size: small;
+      }
+
+      button.editBtn {
+        background-color: var(--bg-color);
+        filter: drop-shadow(0px 4px 16px var(--bg-shadow));
+        padding: 5px 15px;
+        margin: 5px;
+        font-size: small;
+      }
+
+      .buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: end;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1rem;
+      }
+
+    </style>
+    <title>CRUD TIME BABY</title>
+  </head>
+
+  <dialog id="entryPromptDialog">
+    <form id="entryPromptForm" method="dialog">
+      <p id="message"></p>
+
+      <input id="titleInput" name="titleInput" type="text" value="" />
+      <input id="dateInput" name="dateInput" type="date" value="" />
+      <input id="summaryInput" name="summaryInput" type="text" />
+
+      <input id="okBtn" type="submit" value="submit">Ok</button>
+      <button id="cancelBtn" type="submit" value="cancel">Cancel</button>
+    </form>
+  </dialog>
+
+  <dialog id="editPromptDialog">
+    <form id="editPromptForm" method="dialog">
+      <p id="message"></p>
+
+      <input id="titleInput" name="titleInput" type="text" value="" />
+      <input id="dateInput" name="dateInput" type="date" value="" />
+      <input id="summaryInput" name="summaryInput" type="text" />
+
+      <input id="okBtn" type="submit" value="submit">Ok</button>
+      <button id="cancelBtn" type="submit" value="cancel">Cancel</button>
+    </form>
+  </dialog>
+
+  <body>
+    <header>
+      <!--Logo placeholder-->
+      <a href="index.html" title="Back to Homepage" id="logo">Arif Demirkan</a>
+
+      <!-- Navbar -->
+      <nav>
+        <ul id="menu-items">
+          <li><a href="index.html"> Home </a></li>
+          <li><a href="portfolio.html">My Work</a></li>
+          <li><a href="mailto:ademirkan@ucsd.edu"> Contact Me </a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <template id="entryTemplate">
+      <tr>
+        <td class="title"></td>
+        <td class="date"></td>
+        <td class="summary"></td>
+        <td class="buttons">
+          <button class="editBtn"><img src="../assets/images/pencil-solid.svg" height="12px" width='12px'></img></button>
+          <button class="deleteBtn"><img src="../assets/images/trash-solid.svg" height="12px" width="12px"></img></button>
+        </td>
+      </tr>
+    </template>
+
+    <main>
+      <table id="crud-container" cellspacing="0" cellpadding="0" border="0" width="100%"></table>
+      <button id="createBtn" class="primary-btn">Add</button>
+    </main>
+
+    <footer>
+      <ul>
+        <li>
+          <a href="https://github.com/ademirkan" target="”_blank”"> Github </a>
+        </li>
+        <li><a href="mailto:ademirkan@ucsd.edu"> Email </a></li>
+        <li>
+          <a
+            href="https://www.linkedin.com/in/arif-demirkan-4403b4242/"
+            target="”_blank”"
+          >
+            LinkedIn
+          </a>
+        </li>
+        <li><a href="/assets/resume.pdf" download>My Resume</a></li>
+      </ul>
+    </footer>
+  </body>
+
+  <script type="module">
+    import { Blog } from "../blog.js";
+    import { blogprompt } from "../customdialog.js";
+    let crudContainer = document.getElementById("crud-container");
+    let createButton = document.getElementById("createBtn");
+    let entryTemplate = document.querySelector("template#entryTemplate");
+    let entryPromptForm = document.querySelector("#entryPromptForm")
+    let editPromptForm = document.querySelector("#editPromptForm")
+    let editIndex
+
+
+    // Initialize BLOG object
+    var myBlog = new Blog();
+
+    function onEntrySumbit () {
+      let formElement = document.getElementById("entryPromptForm");
+      var form = {};
+      form["title"] = entryPromptForm.querySelector("#titleInput").value;
+      form["summary"] = entryPromptForm.querySelector("#summaryInput").value;
+
+      // VALIDATE HERE
+
+      // creating new one
+      
+      myBlog.createBlog(form["title"], form["summary"]);
+      displayEntries();}
+    
+      
+
+    entryPromptForm.addEventListener("submit", onEntrySumbit)
+
+    function onEditSubmit () {
+      alert("FORM SUBMITTED")
+      let formElement = document.getElementById("editPromptForm");
+      var form = {};
+      form["title"] = editPromptForm.querySelector("#titleInput").value;
+      form["summary"] = editPromptForm.querySelector("#summaryInput").value;
+
+      // VALIDATE HERE
+
+      // creating new one
+      
+      myBlog.editBlog(editIndex, form["title"], form["summary"]);
+      displayEntries();}
+    
+      
+
+    editPromptForm.addEventListener("submit", onEditSubmit)
+
+    function handleEdit(){
+      document.getElementsByTagName("dialog")[1].showModal()
+    }
+    
+
+    // Create button bind
+    createButton.addEventListener("click", () => {
+      document.getElementsByTagName("dialog")[0].showModal()
+    });
+
+    function displayEntries() {
+      crudContainer.innerHTML = "";
+      let entries = myBlog.getAllBlogs();
+      console.log(entries);
+
+      for (let i = 0; i < entries.length; i++) {
+        let clone = entryTemplate.content.cloneNode(true);
+        clone.querySelector(".title").innerText = entries[i]["title"];
+        clone.querySelector(".date").innerText = entries[i]["date"];
+        clone.querySelector(".summary").innerText = entries[i]["summary"];
+
+        let editBtn = clone.querySelector(".editBtn");
+        let deleteBtn = clone.querySelector(".deleteBtn");
+
+        editBtn.addEventListener("click", () => {
+          editIndex = i
+          handleEdit()
+        });
+
+        deleteBtn.addEventListener("click", () => {
+          myBlog.deleteBlog(i);
+          displayEntries();
+        });
+
+        crudContainer.appendChild(clone);
+      }
+    }
+    displayEntries();
+  </script>
+</html>

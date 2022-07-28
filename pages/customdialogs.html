@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--Placeholder for now-->
+    <link rel="stylesheet" href="/index.css" />
+
+    <style>
+      main {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+      }
+      ul {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        row-gap: 10px;
+
+        margin: 0px;
+        padding: 0px;
+        list-style-type: none;
+      }
+    </style>
+    <title>Native Dialoges (HW4)</title>
+  </head>
+
+  <body>
+    <header>
+      <!--Logo placeholder-->
+      <a href="index.html" title="Back to Homepage" id="logo">Arif Demirkan</a>
+
+      <!-- Navbar -->
+      <nav>
+        <ul id="menu-items">
+          <li><a href="index.html"> Home </a></li>
+          <li><a href="portfolio.html">My Work</a></li>
+          <li><a href="mailto:ademirkan@ucsd.edu"> Contact Me </a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <template id="alertTemplate">
+      <form method="dialog">
+        <p id="message"></p>
+        <button id="okBtn">Ok</button>
+      </form>
+    </template>
+
+    <template id="confirmTemplate">
+      <form method="dialog">
+        <p id="message"></p>
+        <button id="confirmBtn">Confirm</button>
+        <button id="cancelBtn">Cancel</button>
+      </form>
+    </template>
+
+    <template id="promptTemplate">
+      <form method="dialog">
+        <p id="message"></p>
+        <input id="promptInput" name="promptInput" type="text" />
+        <button id="okBtn">Ok</button>
+        <button id="cancelBtn">Cancel</button>
+      </form>
+    </template>
+
+    <dialog></dialog>
+    <main>
+      <ul class="dialogue-btns">
+        <li>
+          <button id="alert-btn" class="primary-btn">Alert</button>
+        </li>
+        <li>
+          <button id="confirm-btn">Confirm</button>
+        </li>
+        <li>
+          <button id="prompt-btn" class="primary-btn">Prompt</button>
+        </li>
+        <li>
+          <button id="safePrompt-btn">Safer Prompt</button>
+        </li>
+      </ul>
+      <output id="messageOutput">No output yet</output>
+    </main>
+
+    <footer>
+      <ul>
+        <li>
+          <a href="https://github.com/ademirkan" target="”_blank”"> Github </a>
+        </li>
+        <li><a href="mailto:ademirkan@ucsd.edu"> Email </a></li>
+        <li>
+          <a
+            href="https://www.linkedin.com/in/arif-demirkan-4403b4242/"
+            target="”_blank”"
+          >
+            LinkedIn
+          </a>
+        </li>
+        <li><a href="/assets/resume.pdf" download>My Resume</a></li>
+      </ul>
+    </footer>
+  </body>
+
+  <script type="module">
+    import {
+      customalert,
+      customconfirm,
+      customprompt,
+    } from "../customdialog.js";
+    let messageOutput = document.getElementById("messageOutput");
+    let dialog = document.getElementsByTagName("dialog")[0];
+
+    let dialogResponses = {
+      confirmFalse: "The user rejected the confirmation",
+      confirmTrue: "The user confirmed the request!",
+    };
+
+    dialog.addEventListener("close", () => {
+      messageOutput.innerText =
+        dialogResponses[dialog.returnValue] || dialog.returnValue;
+
+      dialog.innerHTML = "";
+    });
+
+    // Alert
+    document.getElementById("alert-btn").addEventListener("click", (event) => {
+      customalert("Alert button has been clicked!");
+    });
+
+    // Confirm
+    document
+      .getElementById("confirm-btn")
+      .addEventListener("click", (event) => {
+        customconfirm("Please click either ...");
+      });
+
+    // Prompt
+    document.getElementById("prompt-btn").addEventListener("click", (event) => {
+      customprompt("please fill out the input...");
+    });
+  </script>
+</html>

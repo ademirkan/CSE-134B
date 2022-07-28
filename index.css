@@ -22,6 +22,10 @@
 
   --primary-color: rgb(11, 211, 186);
   --primary-shadow: rgba(11, 211, 186, 0.3);
+
+  --cancel-color: rgb(223, 81, 81);
+  --cancel-shadow: rgba(211, 11, 111, 0.2);
+
   --bg-shadow: rgba(0, 0, 0, 0.2);
 
   --text-color: rgb(24, 24, 24);
@@ -110,8 +114,9 @@ button.secondary-btn {
 footer > ul {
   margin: 0px;
   padding: 0px;
-  display: flex;
   list-style-type: none;
+
+  display: flex;
   flex-direction: row;
   justify-content: center;
   gap: 20px;

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--Placeholder for now-->
+    <link rel="stylesheet" href="/index.css" />
+
+    <style></style>
+    <title>CRUD TIME BABY</title>
+  </head>
+
+  <dialog id="entryPromptDialog">
+    <form id="entryPromptForm" method="dialog">
+      <p id="message"></p>
+
+      <input id="titleInput" name="titleInput" type="text" value="" />
+      <input id="dateInput" name="dateInput" type="date" value="" />
+      <input id="summaryInput" name="summaryInput" type="text" />
+
+      <input id="okBtn" type="submit" value="submit">Ok</button>
+      <button id="cancelBtn" type="submit" value="cancel">Cancel</button>
+    </form>
+  </dialog>
+
+  <dialog id="editPromptDialog">
+    <form id="editPromptForm" method="dialog">
+      <p id="message"></p>
+
+      <input id="titleInput" name="titleInput" type="text" value="" />
+      <input id="dateInput" name="dateInput" type="date" value="" />
+      <input id="summaryInput" name="summaryInput" type="text" />
+
+      <input id="okBtn" type="submit" value="submit">Ok</button>
+      <button id="cancelBtn" type="submit" value="cancel">Cancel</button>
+    </form>
+  </dialog>
+
+  <body>
+    <header>
+      <!--Logo placeholder-->
+      <a href="index.html" title="Back to Homepage" id="logo">Arif Demirkan</a>
+
+      <!-- Navbar -->
+      <nav>
+        <ul id="menu-items">
+          <li><a href="index.html"> Home </a></li>
+          <li><a href="portfolio.html">My Work</a></li>
+          <li><a href="mailto:ademirkan@ucsd.edu"> Contact Me </a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <template id="entryTemplate">
+      <div class="entry">
+        <span class="title"></span>
+        <span class="date"></span>
+        <p class="summary"></p>
+        <span class="buttons">
+          <button class="editBtn">Edit</button>
+          <button class="deleteBtn">Delete</button>
+        </span>
+      </div>
+    </template>
+
+    <main>
+      <div id="crud-container"></div>
+      <button id="createBtn">Add</button>
+    </main>
+
+    <footer>
+      <ul>
+        <li>
+          <a href="https://github.com/ademirkan" target="”_blank”"> Github </a>
+        </li>
+        <li><a href="mailto:ademirkan@ucsd.edu"> Email </a></li>
+        <li>
+          <a
+            href="https://www.linkedin.com/in/arif-demirkan-4403b4242/"
+            target="”_blank”"
+          >
+            LinkedIn
+          </a>
+        </li>
+        <li><a href="/assets/resume.pdf" download>My Resume</a></li>
+      </ul>
+    </footer>
+  </body>
+
+  <script type="module">
+    import { Blog } from "../blog.js";
+    import { blogprompt } from "../customdialog.js";
+    let crudContainer = document.getElementById("crud-container");
+    let createButton = document.getElementById("createBtn");
+    let entryTemplate = document.querySelector("template#entryTemplate");
+    let entryPromptForm = document.querySelector("#entryPromptForm")
+    let editPromptForm = document.querySelector("#editPromptForm")
+    let editIndex
+
+
+    // Initialize BLOG object
+    var myBlog = new Blog();
+
+    function onEntrySumbit () {
+      let formElement = document.getElementById("entryPromptForm");
+      var form = {};
+      form["title"] = entryPromptForm.querySelector("#titleInput").value;
+      form["summary"] = entryPromptForm.querySelector("#summaryInput").value;
+      form["date"] = editPromptForm.querySelector("#dateInput").value;
+
+
+      // VALIDATE HERE
+
+      // creating new one
+      
+      myBlog.createBlog(form["title"], form["summary"]);
+      displayEntries();}
+    
+      
+
+    entryPromptForm.addEventListener("submit", onEntrySumbit)
+
+    function onEditSubmit () {
+      let formElement = document.getElementById("editPromptForm");
+      var form = {};
+      form["title"] = editPromptForm.querySelector("#titleInput").value;
+      form["summary"] = editPromptForm.querySelector("#summaryInput").value;
+      form["date"] = editPromptForm.querySelector("#dateInput").value;
+
+      // VALIDATE HERE
+
+      // creating new one
+      
+      myBlog.editBlog(editIndex, form["title"], form["summary"] );
+      displayEntries();}
+    
+      
+
+    editPromptForm.addEventListener("submit", onEditSubmit)
+
+    function handleEdit(){
+      document.getElementsByTagName("dialog")[1].showModal()
+    }
+    
+
+    // Create button bind
+    createButton.addEventListener("click", () => {
+      document.getElementsByTagName("dialog")[0].showModal()
+    });
+
+    function displayEntries() {
+      crudContainer.innerHTML = "";
+      let entries = myBlog.getAllBlogs();
+      console.log(entries);
+
+      for (let i = 0; i < entries.length; i++) {
+        let clone = entryTemplate.content.cloneNode(true);
+        clone.querySelector(".title").innerText = entries[i]["title"];
+        clone.querySelector(".date").innerText = entries[i]["date"];
+        clone.querySelector(".summary").innerText = entries[i]["summary"];
+
+        let editBtn = clone.querySelector(".editBtn");
+        let deleteBtn = clone.querySelector(".deleteBtn");
+
+        editBtn.addEventListener("click", () => {
+          editIndex = i
+          handleEdit()
+        });
+
+        deleteBtn.addEventListener("click", () => {
+          myBlog.deleteBlog(i);
+          displayEntries();
+        });
+
+        crudContainer.appendChild(clone);
+      }
+    }
+    displayEntries();
+  </script>
+</html>
