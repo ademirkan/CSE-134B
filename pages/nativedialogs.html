@@ -7,7 +7,10 @@
 
     <!--Placeholder for now-->
     <link rel="stylesheet" href="/index.css" />
-
+    <script
+      type="text/javascript"
+      src="/node_modules/dompurify/dist/purify.min.js"
+    ></script>
     <style>
       main {
         display: flex;
@@ -32,12 +35,12 @@
   <body>
     <header>
       <!--Logo placeholder-->
-      <a href="index.html" title="Back to Homepage" id="logo">Arif Demirkan</a>
+      <a href="/index.html" title="Back to Homepage" id="logo">Arif Demirkan</a>
 
       <!-- Navbar -->
       <nav>
         <ul id="menu-items">
-          <li><a href="index.html"> Home </a></li>
+          <li><a href="/index.html"> Home </a></li>
           <li><a href="portfolio.html">My Work</a></li>
           <li><a href="mailto:ademirkan@ucsd.edu"> Contact Me </a></li>
         </ul>
@@ -80,7 +83,7 @@
       </ul>
     </footer>
   </body>
-  <script>
+  <script type="module">
     // Alert
     document.getElementById("alert-btn").addEventListener("click", (event) => {
       alert("Alert button has been clicked!");
@@ -103,5 +106,16 @@
         ? `The user entered: ${res}`
         : "The user did not enter anything!";
     });
+
+    document
+      .getElementById("safePrompt-btn")
+      .addEventListener("click", (event) => {
+        res = DomPurify.sanitize(
+          prompt("Please put something in the prompt...")
+        );
+        document.getElementById("messageOutput").innerHTML = res
+          ? `The user entered: ${res}`
+          : "The user did not enter anything!";
+      });
   </script>
 </html>
