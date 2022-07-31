@@ -1,0 +1,12 @@
+// Doing in txt file since VSCODE was being weird with .vue extension
+
+Vue.component('button-counter', {
+  
+  data: function () {
+    return {
+      count: 0
+    }
+  },
+
+  template: '<button v-on:click="count++">Times clicked: {{ count }} </button>'
+})

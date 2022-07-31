@@ -38,17 +38,12 @@ a {
 
 body {
   display: grid;
-  grid-template-areas:
-    "navbar"
-    "main"
-    "footer";
   grid-template-rows: auto 1fr auto;
   min-height: 100vh;
   gap: 2rem;
   margin: auto;
   padding: 2rem;
   width: min(100vw, 800px);
-  background-color: var(--bg-color);
 }
 
 /*   N A V B A R    S T Y L I N G   */

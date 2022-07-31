@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--Placeholder for now-->
+    <link rel="stylesheet" href="/index.css" />
+
+    
+
+    <style>
+      ul {
+        list-style-type: none;
+        display: flex;
+        flex-direction: row;
+      }
+
+      output {
+        font-size: x-small;
+      }
+    </style>
+    <title>Arif's Portfolio</title>
+  </head>
+
+  <body>
+    <header>
+      <!--Logo placeholder-->
+      <a href="/index.html" title="Back to Homepage" id="logo">Arif Demirkan</a>
+
+      <!-- Navbar -->
+      <nav>
+        <ul id="menu-items">
+          <li><a href="/index.html"> Home </a></li>
+          <li><a href="portfolio.html">My Work</a></li>
+          <li>
+            <a href="/pages/methodtest.html"> <b>METHOD TEST</b> </a>
+          </li>
+          <li>
+            <a href="/pages/webcomponent.html"> <b>BUTTON COUNT</b> </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <script>
+      function getToday() {
+        return new Date();
+      }
+    </script>
+
+
+    <main>
+      <form id="myForm">
+        <label for="id">ID:</label><br />
+        <input type="number" id="id" name="id"/><br /><br />
+
+        <label for="article_name">Name:</label><br />
+        <input
+          type="text"
+          id="article_name"
+          name="article_name"
+          
+        /><br /><br />
+
+        <label for="article_body">Body:</label><br />
+        <textarea
+          type="text"
+          id="article_body"
+          name="article_body"
+    
+        ></textarea>
+
+        <input
+          type="hidden"
+          id="date"
+          name="date"
+          readonly
+        />
+      </form>
+      
+      <ul>
+        <li><button id="postBtn" onclick="postForm();">POST</button></li>
+        <li><button id="getBtn" onclick="getForm()">GET</button></li>
+        <li><button id="putBtn" onclick="putForm();">PUT</button></li>
+        <li><button id="deleteBtn" onclick="deleteForm();">DELETE</button></li>
+      </ul>
+      
+      
+            <output id="response"></output>
+
+      <script>
+        const form = document.querySelector('#myForm');
+        const response = document.getElementById('response');
+        const output = document.querySelector('output')
+
+        
+        function postForm(){
+          let formData = new FormData(form)
+          const response = document.getElementById('response');
+          formData.append("date", new Date())
+
+          
+
+          const request = new XMLHttpRequest();
+          request.open("POST", "https://httpbin.org/post", false);
+          request.send(formData);
+
+          output.innerText = request.responseText
+
+          
+        }
+
+        function getForm(){
+          let formData = new FormData(form)
+          formData.append("date", new Date())
+
+
+          let myURL = myURLEncoder('https://httpbin.org/get', formToJSON(formData))
+          console.log(myURL)
+          
+
+          const request = new XMLHttpRequest();
+          request.open("GET", myURL, false);
+          request.send(null);
+
+          output.innerText = request.responseText
+        }
+
+        function putForm(){
+          let formData = new FormData(form)
+          formData.append("date", new Date())
+
+          
+
+          const request = new XMLHttpRequest();
+          request.open("PUT", "https://httpbin.org/put", false);
+          request.send(formData);
+
+          output.innerText = request.responseText
+        }
+
+        function deleteForm(){
+          let formData = new FormData(form)
+          formData.append("date", new Date())
+
+          
+
+          const request = new XMLHttpRequest();
+          request.open("DELETE", "https://httpbin.org/delete", false);
+          request.send(formData);
+
+          output.innerHTML = request.responseText
+        }
+
+        function myURLEncoder(baseURL, jsonObj){
+          let queryString = ''
+
+          // for each key/value in JSON, append &key=(encodedValue) to queryString
+          for (key in jsonObj) {
+            queryString+=`${key}=${encodeURIComponent(String(jsonObj[key]))}&`
+          }
+
+
+          // remove last character
+          queryString = queryString.slice(0, -1);
+
+          return `${baseURL}?${queryString}`
+        }
+
+        function formToJSON(formData){
+          let object = {};
+          formData.forEach(function(value, key){
+            object[key] = value;
+          });
+        
+          return object;
+        }
+
+      </script>
+
+
+      </main>
+    </main>
+
+    <footer>
+      <ul>
+        <li>
+          <a href="https://github.com/ademirkan" target="”_blank”"> Github </a>
+        </li>
+        <li><a href="mailto:ademirkan@ucsd.edu"> Email </a></li>
+        <li>
+          <a
+            href="https://www.linkedin.com/in/arif-demirkan-4403b4242/"
+            target="”_blank”"
+          >
+            LinkedIn
+          </a>
+        </li>
+        <li><a href="/assets/resume.pdf" download>My Resume</a></li>
+      </ul>
+    </footer>
+  </body>
+</html>

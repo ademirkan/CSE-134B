@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--Placeholder for now-->
+    <link rel="stylesheet" href="/index.css" />
+
+    <style></style>
+    <title>Arif's Portfolio</title>
+  </head>
+
+  <body>
+    <header>
+      <!--Logo placeholder-->
+      <a href="/index.html" title="Back to Homepage" id="logo">Arif Demirkan</a>
+
+      <!-- Navbar -->
+      <nav>
+        <ul id="menu-items">
+          <li><a href="/index.html"> Home </a></li>
+          <li><a href="portfolio.html">My Work</a></li>
+          <li>
+            <a href="/pages/methodtest.html"> <b>METHOD TEST</b> </a>
+          </li>
+          <li>
+            <a href="/pages/webcomponent.html"> <b>BUTTON COUNT</b> </a>
+          </li>
+        </ul>
+      </nav>
+    </header>
+
+    <script type="module">
+      // Shamelessly yoinked from the Professor's lecture -- but I understand what's going on
+      class ButtonCount extends HTMLElement {
+        constructor() {
+          super();
+          let btn = document.createElement("button");
+          btn.innerHTML = "Times Clicked: ";
+          let count = document.createElement("output");
+          count.textContent = 0;
+
+          btn.append(count);
+          let slot = document.createElement("slot");
+          btn.append(slot);
+
+          btn.addEventListener("click", () => {
+            let currVal = Number(count.textContent);
+            count.textContent = currVal + 1;
+          });
+
+          this.attachShadow({ mode: "open" });
+          this.shadowRoot.append(btn);
+        }
+      }
+
+      customElements.define("button-count", ButtonCount);
+    </script>
+
+    <main>
+      <button-count></button-count>
+    </main>
+
+    <footer>
+      <ul>
+        <li>
+          <a href="https://github.com/ademirkan" target="”_blank”"> Github </a>
+        </li>
+        <li><a href="mailto:ademirkan@ucsd.edu"> Email </a></li>
+        <li>
+          <a
+            href="https://www.linkedin.com/in/arif-demirkan-4403b4242/"
+            target="”_blank”"
+          >
+            LinkedIn
+          </a>
+        </li>
+        <li><a href="/assets/resume.pdf" download>My Resume</a></li>
+      </ul>
+    </footer>
+  </body>
+</html>
